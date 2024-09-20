@@ -1,0 +1,28 @@
+﻿@using TodoBlazor.Model
+
+<div @onclick="Click" class="TaskDivider">
+    <span class="TaskDivider-button @(Opened ? "bi bi-chevron-down" : "bi bi-chevron-right")"></span>
+    <span>@Text</span>
+    @if (Todos != null)
+    {
+        <span>@(Todos.Count > 0 ? Todos.Count : "")</span>
+    }
+</div>
+
+@if (Todos != null && Opened)
+{
+    @foreach (Todo todo in Todos)
+    {
+        <TodoItem Todo="todo" TodoSelected="TodoSelected" TodoDoneChanged="TodoDoneChanged" TodoImportantChanged="TodoImportantChanged"/>
+    }
+}
+
+@code {
+    [Parameter] public string Text { get; set; }
+    [Parameter] public bool Opened { get; set; }
+    [Parameter] public Func<Task> Click { get; set; }
+    [Parameter] public List<Todo> Todos { get; set; }
+    [Parameter] public Func<long,Task> TodoSelected { get; set; }
+    [Parameter] public Func<long, Task> TodoDoneChanged { get; set; }
+    [Parameter] public Func<long, Task> TodoImportantChanged { get; set; }
+}

@@ -1,0 +1,36 @@
+/* ==========================================================================
+   #CORE
+   ========================================================================== */
+
+//Základní objekty
+
+$BodyPadding: 30px;
+
+.PageContainer {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: min-content 1fr min-content;
+    grid-template-rows: 100%;
+    grid-template-areas: "LeftSidebar Body RightSidebar";
+}
+
+.Body {
+    grid-area: Body;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-row-gap: $BodyPadding;
+    padding: $BodyPadding;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas: "Header" "Main" "TaskAdd";
+}
+
+.DarkMode .Body {
+    background: linear-gradient(#667EEA,#764BA5);
+}
+
+.LightMode .Body {
+    background: linear-gradient(#e2c399,#FCB7A0);
+}

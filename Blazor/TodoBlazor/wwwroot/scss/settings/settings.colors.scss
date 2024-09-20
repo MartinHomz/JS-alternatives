@@ -1,0 +1,71 @@
+﻿///* ========================================================================
+//   #Settings Colors
+//   ======================================================================== */
+
+//Soubor obsahuje proměnné se všemi barvami pro projekt
+$Blue: #62b4d8;
+$Indigo: #9369d7;
+$Purple: #7657ad;
+$Pink: #d7699b;
+$Red: #d8626d;
+$Orange: #e5a26a;
+$Yellow: #e2c365;
+$Green: #63c479;
+$Teal: #64c4a8;
+$Cyan: #63bbc8;
+$White: #fff;
+$Gray: #6c757d;
+$GrayDark: #343a40;
+
+$LightTextColor: #000;
+$LightBg: #f5f5f6;
+$LightBgTransparent: rgba(235, 238, 244,.7);
+$LightColorTransparent: rgba(235, 238, 244,.5);
+$LightBgDarken: rgb(232, 232, 234);
+$LightBgDark: rgb(215, 215, 215);
+$LightBorderColor: #d0d2d8;
+
+$DarkTextColor: #fff;
+$DarkBg: #29292A;
+$DarkBgTransparent: rgba(41, 41, 42,.7);
+$DarkColorTransparent: rgba(41,41,42,.5);
+$DarkBgDarken: darken(#29292A,5%);
+$DarkBgDark: darken(#29292A,10%);
+$DarkBorderColor: #393C40;
+
+:root {
+    --blue: $Blue;
+    --indigo: $Indigo;
+    --purple: $Purple;
+    --pink: $Pink;
+    --red: $Red;
+    --orange: $Orange;
+    --yellow: $Yellow;
+    --green: $Green;
+    --teal: $Teal;
+    --cyan: $Cyan;
+    --white: $White;
+    --gray: $Gray;
+    --gray-dark: $GrayDark;
+}
+
+.LightMode {
+    --textColor: $LightTextColor;
+    --backgroundColor: $LightBg;
+    --backgroundTransparent: $LightBgTransparent;
+    --colorTransparent: $LightColorTransparent;
+    --backgroundDarken: $LightBgDarken;
+    --backgroundDark: $LightBgDark;
+    --backgroundBorderColor: $LightBorderColor;
+}
+
+.DarkMode {
+    --textColor: $DarkTextColor;
+    --backgroundColor: $DarkBg;
+    --backgroundTransparent: $DarkBgTransparent;
+    --colorTransparent: $DarkColorTransparent;
+    --backgroundDarken: $DarkBgDarken;
+    --backgroundDark: $DarkBgDark;
+    --backgroundBorderColor: $DarkBorderColor;
+}
+/*#endregion CSS proměnné*/

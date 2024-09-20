@@ -1,0 +1,21 @@
+﻿<button class="Button @ButtonStyle" @attributes="AdditionalAttributes" title="@Tooltip">
+    @if (!string.IsNullOrEmpty(Icon))
+    {
+        <i class="@Icon @IconStyle"></i>
+    }
+    @if (!string.IsNullOrEmpty(Text))
+    {
+        <span class="@TextStyle">@Text</span>
+    }
+</button>
+
+@code {
+    [Parameter] public string Text { get; set; }
+    [Parameter] public string Icon { get; set; }
+    [Parameter] public string Tooltip { get; set; }
+    [Parameter] public string ButtonStyle { get; set; }
+    [Parameter] public string IconStyle { get; set; }
+    [Parameter] public string TextStyle { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object> AdditionalAttributes { get; set; }
+}

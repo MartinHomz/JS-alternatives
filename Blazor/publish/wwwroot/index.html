@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>BlazorTodo</title>
+    <link href="css/todo.main.min.css" rel="stylesheet" />
+    <link href="lib/bootstrap-icons-1.2.2/font/bootstrap-icons.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="app">
+        <div id="LoadPage" class="LoadPage">
+            <div class="PageLoader">
+                <div class="Logo">
+                    Todo
+                </div>
+                <div class="Loader"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="blazor-error-ui">
+        Nastala neočekávaná chyba.
+        <a href="" class="reload">Restartovat</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="_content/TG.Blazor.IndexedDB/indexedDb.Blazor.js"></script>
+    <script src="js/Shared.js"></script>
+</body>
+
+</html>

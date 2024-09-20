@@ -1,0 +1,11 @@
+﻿///* ========================================================================
+//   #Settings Breakpoints
+//   ======================================================================== */
+
+//Soubor obsahuje velikosti pro rozlišení stylů dle šířky zařízení
+
+$breakpointXs: 0; // Extra malá zařízení (portrait telefony, menší než 576px)
+$breakpointSm: 576px; // Small devices (landscape telefony, 576px a víc)
+$breakpointMd: 768px; // Medium devices (tablety, 768px a víc)
+$breakpointLg: 992px; // Large devices (obrazovky, 992px a víc)
+$breakpointXl: 1200px; // Extra large devices (velké obrazovky, 1200px a víc)

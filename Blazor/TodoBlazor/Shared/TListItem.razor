@@ -1,0 +1,19 @@
+﻿@using TodoBlazor.Model
+
+<li class="LeftSidebar-item" @onclick="(_) => Click(TodoList)">
+    <span class="LeftSidebar-itemIcon @TodoList.Icon"></span>
+    <span class="LeftSidebar-itemText">@TodoList.Name</span>
+    <span class="LeftSidebar-itemCount">@UnfinishedTasksCount</span>
+</li>
+
+@code {
+    [Parameter] public TList TodoList { get; set; }
+    [Parameter] public Func<TList, Task> Click { get; set; }
+    public string UnfinishedTasksCount { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        UnfinishedTasksCount = await TodoList.GetUnfinishedTodosCount();
+    }
+}

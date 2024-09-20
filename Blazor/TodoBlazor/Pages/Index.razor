@@ -1,0 +1,223 @@
+﻿@page "/"
+
+<div id="Page" class="PageContainer @Settings.Current.GetColorMode()">
+    <!--#region Levý postranní panel-->
+    <aside id="LeftSidebar" class="MinScrollBar Sidebar Sidebar--desktop Sidebar--left @GUI.Current.GetSidebarClass(GUI.Current.LeftSidebarStatus)">
+        <div class="Sidebar-closeButton" @onclick="GUI.Current.ToggleLeftSidebar">
+            <span class="bi bi-x"></span>
+        </div>
+        <div class="LeftSidebar-header">
+            <Button Icon="bi bi-gear" Tooltip="Nastavení" @onclick="GUI.Current.ShowSettingsDialog" />
+            <label class="Button" title="Importovat data">
+                <InputFile OnChange="State.Current.ImportData" class="FileButton" />
+                <i class="bi bi-file-earmark-arrow-up"></i>
+            </label>
+            <Button Icon="bi bi-file-earmark-arrow-down" Tooltip="Exportovat data" @onclick="State.Current.ExportData" />
+            <Button Icon="bi bi-search" Tooltip="Vyhledat úkol" @onclick="State.Current.ShowSearchView" />
+        </div>
+        <nav class="LeftSidebar-main">
+            <ul class="LeftSidebar-navigation">
+                <TListItem TodoList="State.Current.TodayTodos" Click="State.Current.SwitchTList" />
+                <TListItem TodoList="State.Current.ImportantTodos" Click="State.Current.SwitchTList" />
+                <TListItem TodoList="State.Current.PlannedTodos" Click="State.Current.SwitchTList" />
+                <TListItem TodoList="State.Current.UndividedTodos" Click="State.Current.SwitchTList" />
+            </ul>
+            <div class="LeftSidebar-navDivider"></div>
+            <ul class="LeftSidebar-navigation">
+                @if (State.Current.TLists != null)
+                {
+                    @foreach (TList todoList in State.Current.TLists)
+                    {
+                        <TListItem TodoList="todoList" Click="State.Current.SwitchTList" />
+                    }
+                }
+            </ul>
+        </nav>
+        <div class="LeftSidebar-footer">
+            <span class="TextBox"><input class="TextBox-input" @bind-value="@GUI.Current.NewTListName" @onkeyup="State.Current.AddNewTListTextKeyUp" type="text" Placeholder="Nový seznam" /></span>
+            <Button Icon="bi bi-plus" Tooltip="Přidat nový seznam" @onclick="State.Current.AddNewTList" />
+        </div>
+    </aside>
+    <!--#endregion Levý postranní panel-->
+    <!--#region Pravý postranní panel-->
+    <aside id="RightSidebar" class="MinScrollBar Sidebar Sidebar--desktop Sidebar--right @GUI.Current.GetSidebarClass(GUI.Current.RightSidebarStatus)">
+        <div class="Sidebar-closeButton u-d-none"></div>
+        @if (State.Current.CurrentTodo != null)
+        {
+            <div class="RightSidebar-header">
+                <div class="RightSidebar-headerContent ContentBlock">
+                    <div class="RightSidebar-taskCheck">
+                        <div class="CheckboxContainer">
+                            <div class="Round">
+                                <input checked="@State.Current.CurrentTodo.Done" @onclick="() => State.Current.TodoDoneChanged(State.Current.CurrentTodo.Id.Value)" type="checkbox" id="chbCurrent" />
+                                <label for="chbCurrent"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="RightSidebar-taskText TextBox"><input class="TextBox-input" value="@State.Current.CurrentTodo.Text" @onchange="State.Current.TodoTextChanged" type="text" Placeholder="Úkol" /></span>
+                    <Button ButtonStyle="@(State.Current.CurrentTodo.Important ? "RightSidebar-taskImportant is-checked" : "RightSidebar-taskImportant")" IconStyle="TaskBlock-importantIcon" Icon="bi bi-star-fill" @onclick="() => State.Current.TodoImportantChanged(State.Current.CurrentTodo.Id.Value)" />
+                </div>
+            </div>
+            <div class="RightSidebar-main">
+                <div class="RightSidebar-steps ContentBlock">
+                    @if (State.Current.TSteps != null)
+                    {
+                        @foreach (TStep step in State.Current.TSteps)
+                        {
+                            <TStepItem Step="step" StepCheckedChanged="State.Current.TStepCheckedChanged" StepTextChanged="State.Current.TStepTextChanged" RemoveStep="State.Current.RemoveTStep" />
+                        }
+                    }
+                    <div class="RightSidebar-step">
+                        <Button ButtonStyle="RightSidebar-taskAdd" Tooltip="Přidat krok" Icon="bi bi-plus" @onclick="() => State.Current.AddTStep()" />
+                        <span class="RightSidebar-taskText TextBox"><input class="TextBox-input" @bind-value="GUI.Current.NewTStepText" @onkeyup="State.Current.AddNewTStepTextKeyUp" type="text" Placeholder="Přidat krok" /></span>
+                    </div>
+                </div>
+                <div class="RightSidebar-edit">
+                    <div class="ContentBlock">
+                        <input class="SidebarDateInput" type="date" value="@(State.Current.CurrentTodo.EndDate != DateTime.MinValue ? State.Current.CurrentTodo.EndDate.ToString("yyyy-MM-dd") : "")" @onchange="State.Current.EndDateChanged" />
+                    </div>
+                    <div class="ContentBlock">
+                        <textarea value="@State.Current.CurrentTodo.Note" @onchange="State.Current.NoteChanged" rows="5" class="SidebarTextArea" placeholder="Poznámka" />
+                    </div>
+                </div>
+            </div>
+            <div class="RightSidebar-footer">
+                <Button Icon="bi bi-chevron-right" @onclick="State.Current.HideRightSidebar" />
+                <span class="RightSidebar-createDate">@State.Current.CurrentTodo.CreateDate.ToShortDateString()</span>
+                <Button Icon="bi bi-trash" Tooltip="Smazat úkol" @onclick="State.Current.RemoveTodo" />
+            </div>
+        }
+    </aside>
+    <!--#endregion Pravý postranní panel-->
+    <div id="Body" class="Body MinScrollBar">
+        <!--#region Header-->
+        <header class="Header">
+            @if (!GUI.Current.SearchView)
+            {
+                <div class="Header-content">
+                    <div class="Header-left">
+                        <Button ButtonStyle="ToggleLeftSidebarButton" Icon="bi bi-list" @onclick="GUI.Current.ToggleLeftSidebar" />
+                        <span class="Header-icon">
+                            <i class="@State.Current.CurrentTList.Icon"></i>
+                        </span>
+                        <span class="Header-caption TextBox"><input readonly="@(State.Current.CurrentTList.Id.Value == Database.UndividedTListId ? true : false)" class="TextBox-input" value="@State.Current.CurrentTList.Name" @onchange="State.Current.TListNameChange" type="text" /></span>
+                    </div>
+                    <div>
+                        @if (State.Current.CurrentTList.Id.Value != Database.UndividedTListId)
+                        {
+                            <Button Icon="bi bi-trash" Tooltip="Odstranit seznam" @onclick="State.Current.RemoveTList" />
+                            <Button Icon="bi bi-gear" Tooltip="Nastavení seznamu" @onclick="GUI.Current.ShowTListSettingsDialog" />
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="Header-content">
+                    <div class="Header-left">
+                        <Button ButtonStyle="ToggleLeftSidebarButton" Icon="bi bi-list" @onclick="GUI.Current.ToggleLeftSidebar" />
+                    </div>
+                </div>
+                <div class="TaskAdd u-w-100">
+                    <div class="TaskAdd-text">
+                        <span class="TextBox"><input class="TextBox-input" value="@GUI.Current.SearchText" @oninput="State.Current.Search" type="text" Placeholder="Hledat úkol" /></span>
+                    </div>
+                </div>
+            }
+        </header>
+        <!--#endregion Header-->
+        <!--#region Main-->
+        <main id="Main" class="Main" @onclick="GUI.Current.OutsideClick">
+            <div class="@GUI.Current.GetContentCoverStyle()"></div>
+            @if (!GUI.Current.SearchView)
+            {
+                <TodoDivider Text="Nedokončeno" Opened="@State.Current.CurrentTList.UnfinishedOpened" Todos="State.Current.UnfinishedTodos" Click="() => State.Current.TodoDividerClick(true)" TodoSelected="State.Current.TodoSelected" TodoDoneChanged="State.Current.TodoDoneChanged" TodoImportantChanged="State.Current.TodoImportantChanged" />
+                <TodoDivider Text="Dokončeno" Opened="@State.Current.CurrentTList.FinishedOpened" Todos="State.Current.FinishedTodos" Click="() => State.Current.TodoDividerClick(false)" TodoSelected="State.Current.TodoSelected" TodoDoneChanged="State.Current.TodoDoneChanged" TodoImportantChanged="State.Current.TodoImportantChanged" />
+            }
+            else
+            {
+                <TodoDivider Text="Vyhledáno" Opened="@true" Todos="State.Current.Todos" Click="State.Current.SearchTodoDividerClick" TodoSelected="State.Current.TodoSelected" TodoDoneChanged="State.Current.TodoDoneChanged" TodoImportantChanged="State.Current.TodoImportantChanged" />
+            }
+        </main>
+        <!--#endregion Main-->
+        @if (!GUI.Current.SearchView)
+        {
+            <div class="TaskAdd">
+                <Button ButtonStyle="TaskAdd-add" Icon="bi bi-plus" @onclick="State.Current.AddTodo" Tooltip="Přidat nový úkol"/>
+                <div class="TaskAdd-text">
+                    <span class="TextBox"><input class="TextBox-input" @bind-value="GUI.Current.NewTodoText" @onkeyup="State.Current.AddNewTodoTextKeyUp" type="text" Placeholder="Přidat úkol" /></span>
+                </div>
+            </div>
+        }
+    </div>
+    <div id="Dialog" class="Dialog @GUI.Current.GetDialogStyle()">
+        <div class="Dialog-content">
+            <span class="Dialog-close bi bi-x" @onclick="GUI.Current.HideDialog"></span>
+            <div class="Dialog-head">
+                @GUI.Current.DialogHeadText
+            </div>
+            <div class="Dialog-body">
+                @if (GUI.Current.DialogShowed)
+                {
+                    @switch (GUI.Current.DialogContent)
+                    {
+                        default:
+                        case DialogContent.Text:
+                            @GUI.Current.DialogBodyText
+                            break;
+                        case DialogContent.Settings:
+                            <div class="Dialog-settingsBlock ContentBlock">
+                                <div class="Dialog-settingsTitle">
+                                    <i class="bi bi-brush"></i>
+                                    Barevný mód
+                                </div>
+                                <div class="Dialog-settingsForm">
+                                    <label for="chbDarkMode">Tmavý mód:</label>
+                                    <input id="chbDarkMode" type="checkbox" @onchange="State.Current.SetColorMode" checked="@Settings.Current.DarkMode" class="Input"/>
+                                </div>
+                            </div>
+                            break;
+                        case DialogContent.TListSettings:
+                            <div class="Dialog-settingsBlock ContentBlock">
+                                <div class="Dialog-settingsTitle">
+                                    <i class="bi bi-box"></i>
+                                    Řazení
+                                </div>
+                                <div class="Dialog-settingsForm">
+                                    <label for="slbOrderTodo">Řadit úkoly podle:</label>
+                                    <select id="slbOrderTodo" value="@State.Current.CurrentTList.OrderTodo" @onchange="State.Current.TListOrderTodoChange" class="Input">
+                                        <option value="@OrderTodo.None">Neřadit</option>
+                                        <option value="@OrderTodo.Important">Důležitosti</option>
+                                        <option value="@OrderTodo.EndDate">Data splnění</option>
+                                        <option value="@OrderTodo.CreateDate">Data vytvoření</option>
+                                        <option value="@OrderTodo.Alphabet">Abecedy</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="Dialog-settingsBlock ContentBlock">
+                                <div class="Dialog-settingsTitle">
+                                    <i class="bi bi-card-image"></i>
+                                    Ikona
+                                </div>
+                                <div class="Dialog-settingsForm">
+                                    <label for="slbIcon">Výběr ikony:</label>
+                                    <select id="slbIcon" value="@State.Current.CurrentTList.Icon" @onchange="State.Current.TListIconChange" class="Input">
+                                        <option value=""></option>
+                                        <option value="bi bi-house">Dům</option>
+                                        <option value="bi bi-briefcase">Zaměstnání</option>
+                                        <option value="bi bi-book">Kniha</option>
+                                        <option value="bi bi-egg-fried">Jídlo</option>
+                                        <option value="bi bi-hammer">Kladivo</option>
+                                        <option value="bi bi-receipt">Recept</option>
+                                        <option value="bi bi-shop">Obchod</option>
+                                    </select>
+                                </div>
+                            </div>
+                            break;
+                    }
+                }
+            </div>
+        </div>
+
+    </div>
+</div>

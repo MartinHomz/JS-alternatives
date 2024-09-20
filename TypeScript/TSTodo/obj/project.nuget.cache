@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "c60DJ9u/dOE9IG0BOilRDBsolt6HVOKvCnCj/nUcHsOUkT+yAEggSEbEyf1H2t4mWIK1rsR1xmQAuAgKlY2KcA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\MarHo\\source\\repos\\TSTodo\\TSTodo\\TSTodo.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\MarHo\\.nuget\\packages\\microsoft.typescript.msbuild\\4.1.2\\microsoft.typescript.msbuild.4.1.2.nupkg.sha512"
+  ],
+  "logs": []
+}

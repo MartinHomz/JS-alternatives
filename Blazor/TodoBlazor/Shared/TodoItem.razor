@@ -1,0 +1,24 @@
+﻿<div class="TaskBlock">
+    <div class="TaskBlock-check">
+        <div class="CheckboxContainer">
+            <div class="Round">
+                <input checked="@Todo.Done" type="checkbox" @onclick="() => TodoDoneChanged(Todo.Id.Value)" id="@GetCheckboxId()" />
+                <label for="@GetCheckboxId()"></label>
+            </div>
+        </div>
+    </div>
+    <span @onclick="() => TodoSelected(Todo.Id.Value)" class="TaskBlock-text">@Todo.Text</span>
+    <span class="TaskBlock-important @(Todo.Important ? "is-checked" : "")" @onclick="() => TodoImportantChanged(Todo.Id.Value)"><i class="TaskBlock-importantIcon bi-star-fill"></i></span>
+</div>
+
+@code {
+    [Parameter] public Todo Todo { get; set; }
+    [Parameter] public Func<long,Task> TodoSelected { get; set; }
+    [Parameter] public Func<long, Task> TodoDoneChanged { get; set; }
+    [Parameter] public Func<long, Task> TodoImportantChanged { get; set; }
+
+    private string GetCheckboxId()
+    {
+        return $"chbtask{Todo.Id.Value}";
+    }
+}

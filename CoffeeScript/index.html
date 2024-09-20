@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>CoffeeScriptTodo</title>
+    <link href="Assets/css/todo.main.min.css" rel="stylesheet" />
+    <link href="Assets/lib/bootstrap-icons-1.2.2/font/bootstrap-icons.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="app">
+        <div id="Page" class="PageContainer">
+            <!--#region Levý postranní panel-->
+            <aside id="LeftSidebar" class="MinScrollBar Sidebar Sidebar--desktop Sidebar--left">
+                <div id="btnHideLeftSidebar" class="Sidebar-closeButton">
+                    <span class="bi bi-x"></span>
+                </div>
+                <div class="LeftSidebar-header">
+                    <button id="btnLeftSidebarSettings" class="Button" title="Nastavení">
+                        <i class="bi bi-gear"></i>
+                    </button>
+                    <label class="Button" title="Importovat data">
+                        <input id="fileLeftSidebarImport" type="file" class="FileButton" />
+                        <i class="bi bi-file-earmark-arrow-up"></i>
+                    </label>
+                    <button id="btnLeftSidebarExport" class="Button" title="Exportovat data">
+                        <i class="bi bi-file-earmark-arrow-down"></i>
+                    </button>
+                    <button id="btnLeftSidebarSearch" class="Button" title="Vyhledat úkol">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+                <nav class="LeftSidebar-main">
+                    <ul id="NavigationBaseTLists" class="LeftSidebar-navigation">
+                    </ul>
+                    <div class="LeftSidebar-navDivider"></div>
+                    <ul id="NavigationUserTLists" class="LeftSidebar-navigation">
+                    </ul>
+                </nav>
+                <div class="LeftSidebar-footer">
+                    <span class="TextBox">
+                        <input id="txtNewTListText" class="TextBox-input" type="text" Placeholder="Nový seznam" />
+                    </span>
+                    <button id="btnAddNewTList" class="Button" title="Přidat nový seznam">
+                        <i class="bi bi-plus"></i>
+                    </button>
+                </div>
+            </aside>
+            <!--#endregion Levý postranní panel-->
+            <!--#region Pravý postranní panel-->
+            <aside id="RightSidebar" class="MinScrollBar Sidebar Sidebar--desktop Sidebar--right">
+                <div class="Sidebar-closeButton u-d-none"></div>
+                <div class="RightSidebar-header">
+                    <div class="RightSidebar-headerContent ContentBlock">
+                        <div class="RightSidebar-taskCheck">
+                            <div class="CheckboxContainer">
+                                <div class="Round">
+                                    <input id="chbRightSidebarTodoDone" type="checkbox" />
+                                    <label for="chbRightSidebarTodoDone"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="RightSidebar-taskText TextBox">
+                            <input id="txtRightSidebarTodoText" class="TextBox-input" type="text" Placeholder="Úkol" />
+                        </span>
+                        <button id="btnRightSidebarTodoImportant" class="Button RightSidebar-taskImportant">
+                            <i class="TaskBlock-importantIcon bi bi-star-fill"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="RightSidebar-main">
+                    <div class="RightSidebar-steps ContentBlock">
+                        <div id="TStepContainer">
+                        </div>
+                        <div class="RightSidebar-step">
+                            <button id="btnAddNewTStep" class="Button RightSidebar-taskAdd" title="Přidat krok">
+                                <i class="bi bi-plus"></i>
+                            </button>
+                            <span class="RightSidebar-taskText TextBox">
+                                <input id="txtNewTStepText" class="TextBox-input" type="text" Placeholder="Přidat krok" />
+                            </span>
+                        </div>
+                    </div>
+                    <div class="RightSidebar-edit">
+                        <div class="ContentBlock">
+                            <input id="dtpRightSidebarTodoEndDate" class="SidebarDateInput" type="date" />
+                        </div>
+                        <div class="ContentBlock">
+                            <textarea id="txaRightSidebarTodoNote" rows="5" class="SidebarTextArea" placeholder="Poznámka"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="RightSidebar-footer">
+                    <button id="btnHideRightSidebar" class="Button">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                    <span id="lblRightSidebarTodoCreateDate" class="RightSidebar-createDate"></span>
+                    <button id="btnDeleteTodo" class="Button" title="Smazat úkol">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </aside>
+            <!--#endregion Pravý postranní panel-->
+            <div id="Body" class="Body MinScrollBar">
+                <!--#region Header-->
+                <header class="Header">
+                    <div class="Header-content">
+                        <div class="Header-left">
+                            <button id="btnToggleLeftSidebar" class="Button ToggleLeftSidebarButton">
+                                <i class="bi bi-list"></i>
+                            </button>
+                            <span class="Header-icon">
+                                    <i id="lblHeaderTListIcon"></i>
+                            </span>
+                            <span class="Header-caption TextBox">
+                                <input id="txtHeaderTListName" class="TextBox-input" type="text" />
+                            </span>
+                        </div>
+                        <div id="TListControls">
+                            <button id="btnDeleteTList" class="Button" title="Odstranit seznam">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                            <button id="btnSettingsTList" class="Button" title="Nastavení seznamu">
+                                <i class="bi bi-gear"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!--SearchView-->
+                    <div id="SearchViewEditor" class="TaskAdd u-w-100">
+                        <div class="TaskAdd-text">
+                            <span class="TextBox">
+                                <input id="txtSearchText" class="TextBox-input" type="text" Placeholder="Hledat úkol" />
+                            </span>
+                        </div>
+                    </div>
+                </header>
+                <!--#endregion Header-->
+                <!--#region Main-->
+                <main id="Main" class="Main">
+                    <div id="MainCover" class=""></div>
+                    <div id="TodoDividerContainer"></div>
+                </main>
+                <!--#endregion Main-->
+                <div id="AddTodoContainer" class="TaskAdd">
+                    <button id="btnAddNewTodo" class="Button TaskAdd-add" title="Přidat nový úkol">
+                        <i class="bi bi-plus"></i>
+                    </button>
+                    <div class="TaskAdd-text">
+                        <span class="TextBox"><input id="txtNewTodoText" class="TextBox-input" type="text" Placeholder="Přidat úkol" /></span>
+                    </div>
+                </div>
+            </div>
+            <div id="Dialog" class="Dialog">
+                <div class="Dialog-content">
+                    <span id="btnHideDialog" class="Dialog-close bi bi-x"></span>
+                    <div id="lblDialogHead" class="Dialog-head">
+                    </div>
+                    <div class="Dialog-body">
+                        <!--Text-->
+                        <div id="DialogTextContainer"></div>
+                        <!--Settings-->
+                        <div id="DialogSettingsContainer">
+                            <div class="Dialog-settingsBlock ContentBlock">
+                                <div class="Dialog-settingsTitle">
+                                    <i class="bi bi-brush"></i> Barevný mód
+                                </div>
+                                <div class="Dialog-settingsForm">
+                                    <label for="chbDarkMode">Tmavý mód:</label>
+                                    <input id="chbDarkMode" type="checkbox" class="Input" />
+                                </div>
+                            </div>
+                        </div>
+                        <!--TList Settings-->
+                        <div id="DialogTListSettingsContainer">
+                            <div class="Dialog-settingsBlock ContentBlock">
+                                <div class="Dialog-settingsTitle">
+                                    <i class="bi bi-box"></i> Řazení
+                                </div>
+                                <div class="Dialog-settingsForm">
+                                    <label for="slbOrderTodo">Řadit úkoly podle:</label>
+                                    <select id="slbOrderTodo" class="Input">
+                                                <option value="0">Neřadit</option>
+                                                <option value="1">Důležitosti</option>
+                                                <option value="2">Data splnění</option>
+                                                <option value="3">Abecedy</option>
+                                                <option value="4">Data vytvoření</option>
+                                            </select>
+                                </div>
+                            </div>
+                            <div class="Dialog-settingsBlock ContentBlock">
+                                <div class="Dialog-settingsTitle">
+                                    <i class="bi bi-card-image"></i> Ikona
+                                </div>
+                                <div class="Dialog-settingsForm">
+                                    <label for="slbIcon">Výběr ikony:</label>
+                                    <select id="slbIcon" class="Input">
+                                                <option value=""></option>
+                                                <option value="bi bi-house">Dům</option>
+                                                <option value="bi bi-briefcase">Zaměstnání</option>
+                                                <option value="bi bi-book">Kniha</option>
+                                                <option value="bi bi-egg-fried">Jídlo</option>
+                                                <option value="bi bi-hammer">Kladivo</option>
+                                                <option value="bi bi-receipt">Recept</option>
+                                                <option value="bi bi-shop">Obchod</option>
+                                            </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="Assets/js/jquery-3.5.1.min.js"></script>
+    <script src="Assets/lib/db.js-0.9.0/src/db.js"></script>
+    <script src="Settings.js"></script>
+    <script src="TStep.js"></script>
+    <script src="Todo.js"></script>
+    <script src="TList.js"></script>
+    <script src="Database.js"></script>
+    <script src="GUI.js"></script>
+    <script src="State.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+﻿@using TodoBlazor.Model
+
+<div class="RightSidebar-step">
+    <div class="RightSidebar-taskCheck">
+        <div class="CheckboxContainer">
+            <div class="Round">
+                <input checked="@Step.Done" type="checkbox" @onchange="(_) => StepCheckedChanged(Step.Id.Value)" id="@GetCheckboxId()" />
+                <label for="@GetCheckboxId()"></label>
+            </div>
+        </div>
+    </div>
+    <span class="RightSidebar-taskText TextBox"><input class="TextBox-input" value="@Step.Text" @onchange="(e) => StepTextChanged(e, Step.Id.Value)" type="text" /></span>
+    <Button ButtonStyle="RightSidebar-taskDelete" Tooltip="Smazat krok" Icon="bi bi-trash" @onclick="() => RemoveStep(Step.Id.Value)" />
+</div>
+
+@code {
+    [Parameter] public TStep Step { get; set; }
+    [Parameter] public Func<long, Task> StepCheckedChanged { get; set; }
+    [Parameter] public Func<ChangeEventArgs, long, Task> StepTextChanged { get; set; }
+    [Parameter] public Func<long, Task> RemoveStep { get; set; }
+
+    private string GetCheckboxId()
+    {
+        return $"chbStep{Step.Id.Value}";
+    }
+
+}
